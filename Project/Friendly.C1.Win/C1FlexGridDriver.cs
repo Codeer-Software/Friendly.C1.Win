@@ -50,13 +50,13 @@ namespace Friendly.C1.Win
 
         static int[] GetSelectedCllection(Control grid, string getter)
         {
-            var items = InvokeHelper.Invoke(grid, getter);
-            var count = (int)InvokeHelper.Invoke(items, "get_Count");
+            var items = Invoker.Call(grid, getter);
+            var count = (int)Invoker.Call(items, "get_Count");
             var l = new List<int>();
             for (int i = 0; i < count; i++)
             {
-                var item = InvokeHelper.Invoke(items, "get_Item", i);
-                if ((bool)InvokeHelper.Invoke(item, "get_Selected"))
+                var item = Invoker.Call(items, "get_Item", i);
+                if ((bool)Invoker.Call(item, "get_Selected"))
                 {
                     l.Add(i);
                 }
@@ -126,7 +126,7 @@ namespace Friendly.C1.Win
                 ret[i] = new object[rightCol - leftCol + 1];
                 for (int j = 0, col = leftCol; col <= rightCol; j++, col++)
                 {
-                    var obj = InvokeHelper.Invoke(grid, "get_Item", row, col);
+                    var obj = Invoker.Call(grid, "get_Item", row, col);
                     ret[i][j] = obj;
                 }
             }
@@ -156,7 +156,7 @@ namespace Friendly.C1.Win
         static void EmulateSelect(Control grid, int row, int col, int rowSel, int colSel)
         {
             grid.Focus();
-            InvokeHelper.Invoke(grid, "Select", row, col, rowSel, colSel);
+            Invoker.Call(grid, "Select", row, col, rowSel, colSel);
         }
 
         public void EmulateAddRowSelect(int row)
@@ -171,9 +171,9 @@ namespace Friendly.C1.Win
 
         static void EmulateAddRowSelect(Control grid, int row)
         {
-            var items = InvokeHelper.Invoke(grid, "get_Rows");
-            var item = InvokeHelper.Invoke(items, "get_Item", row);
-            InvokeHelper.Invoke(item, "set_Selected", true);
+            var items = Invoker.Call(grid, "get_Rows");
+            var item = Invoker.Call(items, "get_Item", row);
+            Invoker.Call(item, "set_Selected", true);
         }
 
         public void EmulateEditText(string text)
@@ -189,11 +189,11 @@ namespace Friendly.C1.Win
         static void EmulateEditText(Control grid, string text)
         {
             grid.Focus();
-            InvokeHelper.Invoke(grid, "StartEditing");
-            var edit = (Control)InvokeHelper.Invoke(grid, "get_Editor");
+            Invoker.Call(grid, "StartEditing");
+            var edit = (Control)Invoker.Call(grid, "get_Editor");
             edit.Focus();
-            InvokeHelper.Invoke(edit, "set_Text", text);
-            InvokeHelper.Invoke(grid, "FinishEditing");
+            Invoker.Call(edit, "set_Text", text);
+            Invoker.Call(grid, "FinishEditing");
         }
 
         public void EmulateEditCheck(bool check)
@@ -211,13 +211,13 @@ namespace Friendly.C1.Win
             grid.Focus();
             while (true)
             {
-                var data = InvokeHelper.Invoke(grid, "get_Item", row, col);
+                var data = Invoker.Call(grid, "get_Item", row, col);
                 if (check == (data != null && (bool)data))
                 {
                     break;
                 }
-                InvokeHelper.Invoke(grid, "StartEditing");
-                InvokeHelper.Invoke(grid, "FinishEditing");
+                Invoker.Call(grid, "StartEditing");
+                Invoker.Call(grid, "FinishEditing");
             }
         }
 
@@ -234,11 +234,11 @@ namespace Friendly.C1.Win
         static void EmulateEditCombo(Control grid, int index)
         {
             grid.Focus();
-            InvokeHelper.Invoke(grid, "StartEditing");
-            var edit = (Control)InvokeHelper.Invoke(grid, "get_Editor");
+            Invoker.Call(grid, "StartEditing");
+            var edit = (Control)Invoker.Call(grid, "get_Editor");
             edit.Focus();
-            InvokeHelper.Invoke(edit, "set_SelectedIndex", index);
-            InvokeHelper.Invoke(grid, "FinishEditing");
+            Invoker.Call(edit, "set_SelectedIndex", index);
+            Invoker.Call(grid, "FinishEditing");
         }
     }
 }
