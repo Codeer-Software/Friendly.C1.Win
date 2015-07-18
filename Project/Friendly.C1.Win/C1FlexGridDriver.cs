@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using Codeer.Friendly;
 using Codeer.Friendly.Windows;
+using Friendly.C1.Win.Inside;
+using System.Collections.Generic;
 
 namespace Friendly.C1.Win
 {
@@ -34,17 +36,32 @@ namespace Friendly.C1.Win
 
         public int[] SelectedRows { get { return (int[])AppVar.App[GetType(), "GetSelectedRows"](this).Core; } }
 
-        static int[] GetSelectedRows(object grid)
+        static int[] GetSelectedRows(Control grid)
         {
-            return new int[0];
+            return GetSelectedCllection(grid, "get_Rows");
         }
-
 
         public int[] SelectedCols { get { return (int[])AppVar.App[GetType(), "GetSelectedCols"](this).Core; } }
 
-        static int[] GetSelectedCols(object grid)
+        static int[] GetSelectedCols(Control grid)
         {
-            return new int[0];
+            return GetSelectedCllection(grid, "get_Cols");
+        }
+
+        static int[] GetSelectedCllection(Control grid, string getter)
+        {
+            var items = InvokeHelper.Invoke(grid, getter);
+            var count = (int)InvokeHelper.Invoke(items, "get_Count");
+            var l = new List<int>();
+            for (int i = 0; i < count; i++)
+            {
+                var item = InvokeHelper.Invoke(items, "get_Item", i);
+                if ((bool)InvokeHelper.Invoke(item, "get_Selected"))
+                {
+                    l.Add(i);
+                }
+            }
+            return l.ToArray();
         }
 
 #if ENG
@@ -70,14 +87,24 @@ namespace Friendly.C1.Win
             return cell.IsNull ? string.Empty : cell.ToString();
         }
 
-        public string[] GetCellTexts(int topRow, int bottomRow, int leftCol, int rightCol)
+        public string[][] GetCellTexts(int topRow, int bottomRow, int leftCol, int rightCol)
         {
-            return (string[])AppVar.App[GetType(), "GetCellTexts"](this, topRow, bottomRow, leftCol, rightCol).Core;
+            return (string[][])AppVar.App[GetType(), "GetCellTexts"](this, topRow, bottomRow, leftCol, rightCol).Core;
         }
 
-        static string[] GetCellTexts(object grid, int topRow, int bottomRow, int leftCol, int rightCol)
+        static string[][] GetCellTexts(Control grid, int topRow, int bottomRow, int leftCol, int rightCol)
         {
-            throw new NotImplementedException();
+            var objs = GetCellObjects(grid, topRow, bottomRow, leftCol, rightCol);
+            string[][] ret = new string[objs.Length][];
+            for (int i = 0; i < objs.Length; i++) 
+            {
+                ret[i] = new string[objs[i].Length];
+                for (int j = 0; j < objs[i].Length; j++) 
+                {
+                    ret[i][j] = objs[i][j] == null ? string.Empty : objs[i][j].ToString();
+                }
+            }
+            return ret;
         }
 
         public object GetCellObject(int row, int col)
@@ -91,9 +118,19 @@ namespace Friendly.C1.Win
             return (string[])AppVar.App[GetType(), "GetCellObjects"](this, topRow, bottomRow, leftCol, rightCol).Core;
         }
 
-        static object[] GetCellObjects(object grid, int topRow, int bottomRow, int leftCol, int rightCol)
+        static object[][] GetCellObjects(Control grid, int topRow, int bottomRow, int leftCol, int rightCol)
         {
-            throw new NotImplementedException();
+            object[][] ret = new object[bottomRow - topRow + 1][];
+            for (int i = 0, row = topRow; row <= bottomRow; i++, row++)
+            {
+                ret[i] = new object[rightCol - leftCol + 1];
+                for (int j = 0, col = leftCol; col <= rightCol; j++, col++)
+                {
+                    var obj = InvokeHelper.Invoke(grid, "get_Item", row, col);
+                    ret[i][j] = obj;
+                }
+            }
+            return ret;
         }
 
         public void EmulateSelect(int row, int col)
@@ -116,9 +153,10 @@ namespace Friendly.C1.Win
             AppVar.App[GetType(), "EmulateSelect", async](this, row, col, rowSel, colSel);
         }
 
-        static void EmulateSelect(object grid, int row, int col, int rowSel, int colSel)
+        static void EmulateSelect(Control grid, int row, int col, int rowSel, int colSel)
         {
-            throw new NotImplementedException();
+            grid.Focus();
+            InvokeHelper.Invoke(grid, "Select", row, col, rowSel, colSel);
         }
 
         public void EmulateAddRowSelect(int row)
@@ -131,9 +169,11 @@ namespace Friendly.C1.Win
             AppVar.App[GetType(), "EmulateAddRowSelect", async](this, row);
         }
 
-        static void EmulateAddRowSelect(object grid, int row)
+        static void EmulateAddRowSelect(Control grid, int row)
         {
-            throw new NotImplementedException();
+            var items = InvokeHelper.Invoke(grid, "get_Rows");
+            var item = InvokeHelper.Invoke(items, "get_Item", row);
+            InvokeHelper.Invoke(item, "set_Selected", true);
         }
 
         public void EmulateEditText(string text)
@@ -146,24 +186,39 @@ namespace Friendly.C1.Win
             AppVar.App[GetType(), "EmulateEditText", async](this, text);
         }
 
-        static void EmulateEditText(object grid, string text)
+        static void EmulateEditText(Control grid, string text)
         {
-            throw new NotImplementedException();
+            grid.Focus();
+            InvokeHelper.Invoke(grid, "StartEditing");
+            var edit = (Control)InvokeHelper.Invoke(grid, "get_Editor");
+            edit.Focus();
+            InvokeHelper.Invoke(edit, "set_Text", text);
+            InvokeHelper.Invoke(grid, "FinishEditing");
         }
 
         public void EmulateEditCheck(bool check)
         {
-            AppVar.App[GetType(), "EmulateEditCheck"](this, check);
+            AppVar.App[GetType(), "EmulateEditCheck"](this, Row, Col, check);
         }
 
         public void EmulateEditCheck(bool check, Async async)
         {
-            AppVar.App[GetType(), "EmulateEditCheck", async](this, check);
+            AppVar.App[GetType(), "EmulateEditCheck", async](this, Row, Col, check);
         }
 
-        static void EmulateEditCheck(object grid, bool check)
+        static void EmulateEditCheck(Control grid, int row, int col, bool check)
         {
-            throw new NotImplementedException();
+            grid.Focus();
+            while (true)
+            {
+                var data = InvokeHelper.Invoke(grid, "get_Item", row, col);
+                if (check == (data != null && (bool)data))
+                {
+                    break;
+                }
+                InvokeHelper.Invoke(grid, "StartEditing");
+                InvokeHelper.Invoke(grid, "FinishEditing");
+            }
         }
 
         public void EmulateEditCombo(int index)
@@ -176,9 +231,14 @@ namespace Friendly.C1.Win
             AppVar.App[GetType(), "EmulateEditCombo", async](this, index);
         }
 
-        static void EmulateEditCombo(object grid, int index)
+        static void EmulateEditCombo(Control grid, int index)
         {
-            throw new NotImplementedException();
+            grid.Focus();
+            InvokeHelper.Invoke(grid, "StartEditing");
+            var edit = (Control)InvokeHelper.Invoke(grid, "get_Editor");
+            edit.Focus();
+            InvokeHelper.Invoke(edit, "set_SelectedIndex", index);
+            InvokeHelper.Invoke(grid, "FinishEditing");
         }
     }
 }

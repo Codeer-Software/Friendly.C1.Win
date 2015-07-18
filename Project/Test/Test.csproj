@@ -85,6 +85,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="Target.cs" />
     <Compile Include="FlexGridTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -38,8 +38,44 @@ namespace Test
         }
 
         [TestMethod]
-        public void Test()
+        public void TestSelect()
         {
+            _grid.EmulateSelect(1, 2);
+            _grid.Row.Is(1);
+            _grid.Col.Is(2);
+            _grid.RowSel.Is(1);
+            _grid.ColSel.Is(2);
+        }
+
+        [TestMethod]
+        public void TestGetTexts()
+        {
+            _grid.EmulateSelect(1, 1);
+            _grid.EmulateEditText("1");
+            _grid.EmulateSelect(1, 2);
+            _grid.EmulateEditCheck(true);
+            _grid.EmulateEditCheck(false);
+            _grid.EmulateSelect(2, 2);
+            _grid.EmulateEditCheck(true);
+            var ret = _grid.GetCellTexts(1, 2, 1, 2);
+            ret.Length.Is(2);
+            ret[0].Length.Is(2);
+            ret[0][0].Is("1");
+            ret[0][1].Is(false.ToString());
+            ret[1][0].Is(string.Empty);
+            ret[1][1].Is(true.ToString());
+
+            _grid.EmulateSelect(1, 3);
+            _grid.EmulateEditCombo(2);
+        }
+
+        [TestMethod]
+        public void XXX() 
+        {
+            _grid.Dynamic().SelectionMode = _app.Type().C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            _grid.EmulateAddRowSelect(1);
+            _grid.EmulateAddRowSelect(3);
+            _grid.EmulateAddRowSelect(5);
         }
     }
 }
