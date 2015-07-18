@@ -87,29 +87,9 @@ namespace Friendly.C1.Win
 
         static int[] GetSelectedRows(Control grid)
         {
-            return GetSelectedCllection(grid, "get_Rows");
-        }
-
-#if ENG
-        /// <summary>
-        /// Cols of selection.
-        /// </summary>
-#else
-        /// <summary>
-        /// 選択列。
-        /// </summary>
-#endif    
-        public int[] SelectedCols { get { return (int[])AppVar.App[GetType(), "GetSelectedCols"](this).Core; } }
-
-        static int[] GetSelectedCols(Control grid)
-        {
-            return GetSelectedCllection(grid, "get_Cols");
-        }
-
-        static int[] GetSelectedCllection(Control grid, string getter)
-        {
-            var items = Invoker.Call(grid, getter);
+            var items = Invoker.Call(grid, "get_Rows");
             var count = (int)Invoker.Call(items, "get_Count");
+
             var l = new List<int>();
             for (int i = 0; i < count; i++)
             {
@@ -149,8 +129,8 @@ namespace Friendly.C1.Win
         /// <summary>
         /// セルのテキストを取得します。
         /// </summary>
-        /// <param name="row">アプリケーション内変数。</param>
-        /// <param name="col">アプリケーション内変数。</param>
+        /// <param name="row">行。</param>
+        /// <param name="col">列。</param>
 #endif
         public string GetCellText(int row, int col)
         {
@@ -158,15 +138,32 @@ namespace Friendly.C1.Win
             return cell.IsNull ? string.Empty : cell.ToString();
         }
 
-        public string[][] GetCellTexts(int topRow, int bottomRow, int leftCol, int rightCol)
+#if ENG
+        /// <summary>
+        /// Get cell's texts.
+        /// </summary>
+        /// <param name="topRow">Top row.</param>
+        /// <param name="bottomRow">Bottom row.</param>
+        /// <param name="leftCol">Left col.</param>
+        /// <param name="rightCol">Right col.</param>
+#else
+        /// <summary>
+        /// セルのテキストを取得します。
+        /// </summary>
+        /// <param name="topRow">上行。</param>
+        /// <param name="bottomRow">下列。</param>
+        /// <param name="leftCol">左行。</param>
+        /// <param name="rightCol">右列。</param>
+#endif
+        public string[][] GetCellTexts(int topRow, int leftCol, int bottomRow, int rightCol)
         {
-            return (string[][])AppVar.App[GetType(), "GetCellTexts"](this, topRow, bottomRow, leftCol, rightCol).Core;
+            return (string[][])AppVar.App[GetType(), "GetCellTexts"](this, topRow, leftCol, bottomRow, rightCol).Core;
         }
 
-        static string[][] GetCellTexts(Control grid, int topRow, int bottomRow, int leftCol, int rightCol)
+        static string[][] GetCellTexts(Control grid, int topRow, int leftCol, int bottomRow, int rightCol)
         {
             var cols = Invoker.Call(grid, "get_Cols");
-            var objs = GetCellObjects(grid, topRow, bottomRow, leftCol, rightCol);
+            var objs = GetCellObjects(grid, topRow, leftCol, bottomRow, rightCol);
             string[][] ret = new string[objs.Length][];
             for (int i = 0; i < objs.Length; i++) 
             {
@@ -199,24 +196,53 @@ namespace Friendly.C1.Win
                             }
                         }
                     }
-                    ret[i][j] = objs[i][j] == null ? string.Empty : objs[i][j].ToString();
                 }
             }
             return ret;
         }
 
+#if ENG
+        /// <summary>
+        /// Get cell's object.
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="col">Col.</param>
+#else
+        /// <summary>
+        /// セルのオブジェクトを取得します。
+        /// </summary>
+        /// <param name="row">行。</param>
+        /// <param name="col">列。</param>
+#endif
         public object GetCellObject(int row, int col)
         {
             var cell = AppVar["[,]"](row, col);
             return cell.Core;
         }
 
-        public object[] GetCellObjects(int topRow, int bottomRow, int leftCol, int rightCol)
+#if ENG
+        /// <summary>
+        /// Get cell's objects.
+        /// </summary>
+        /// <param name="topRow">Top row.</param>
+        /// <param name="bottomRow">Bottom row.</param>
+        /// <param name="leftCol">Left col.</param>
+        /// <param name="rightCol">Right col.</param>
+#else
+        /// <summary>
+        /// セルのオブジェクトを取得します。
+        /// </summary>
+        /// <param name="topRow">上行。</param>
+        /// <param name="bottomRow">下列。</param>
+        /// <param name="leftCol">左行。</param>
+        /// <param name="rightCol">右列。</param>
+#endif
+        public object[][] GetCellObjects(int topRow, int leftCol, int bottomRow, int rightCol)
         {
-            return (string[])AppVar.App[GetType(), "GetCellObjects"](this, topRow, bottomRow, leftCol, rightCol).Core;
+            return (object[][])AppVar.App[GetType(), "GetCellObjects"](this, topRow, leftCol, bottomRow, rightCol).Core;
         }
 
-        static object[][] GetCellObjects(Control grid, int topRow, int bottomRow, int leftCol, int rightCol)
+        static object[][] GetCellObjects(Control grid, int topRow, int leftCol, int bottomRow, int rightCol)
         {
             object[][] ret = new object[bottomRow - topRow + 1][];
             for (int i = 0, row = topRow; row <= bottomRow; i++, row++)
@@ -231,25 +257,94 @@ namespace Friendly.C1.Win
             return ret;
         }
 
+#if ENG
+        /// <summary>
+        /// Select cell.
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="col">Col.</param>
+#else
+        /// <summary>
+        /// 指定のセルを選択します。
+        /// </summary>
+        /// <param name="row">行。</param>
+        /// <param name="col">列。</param>
+#endif
         public void EmulateSelect(int row, int col)
         {
             AppVar.App[GetType(), "EmulateSelect"](this, row, col, row, col);
         }
 
+#if ENG
+        /// <summary>
+        /// Select cell.
+        /// Executes asynchronously. 
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="col">Col.</param>
+        /// <param name="async">Asynchronous execution.</param>
+#else
+        /// <summary>
+        /// 指定のセルを選択します。
+        /// 非同期で実行します。
+        /// </summary>
+        /// <param name="row">行。</param>
+        /// <param name="col">列。</param>
+        /// <param name="async">非同期実行オブジェクト。</param>
+#endif
         public void EmulateSelect(int row, int col, Async async)
         {
             AppVar.App[GetType(), "EmulateSelect", async](this, row, col, row, col);
         }
 
+#if ENG
+        /// <summary>
+        /// Select cell.
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="col">Col.</param>
+        /// <param name="rowSel">Last row of selection.</param>
+        /// <param name="colSel">Last col of selection.</param>
+#else
+        /// <summary>
+        /// 指定のセルを選択します。
+        /// </summary>
+        /// <param name="row">選択行。</param>
+        /// <param name="col">選択列。</param>
+        /// <param name="rowSel">現在の選択範囲の最後の行。</param>
+        /// <param name="colSel">現在の選択範囲の最後の列。</param>
+#endif
         public void EmulateSelect(int row, int col, int rowSel, int colSel)
         {
             AppVar.App[GetType(), "EmulateSelect"](this, row, col, rowSel, colSel);
         }
 
+#if ENG
+        /// <summary>
+        /// Select cell.
+        /// Executes asynchronously. 
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="col">Col.</param>
+        /// <param name="rowSel">Last row of selection.</param>
+        /// <param name="colSel">Last col of selection.</param>
+        /// <param name="async">Asynchronous execution.</param>
+#else
+        /// <summary>
+        /// 指定のセルを選択します。
+        /// 非同期で実行します。
+        /// </summary>
+        /// <param name="row">選択行。</param>
+        /// <param name="col">選択列。</param>
+        /// <param name="rowSel">現在の選択範囲の最後の行。</param>
+        /// <param name="colSel">現在の選択範囲の最後の列。</param>
+        /// <param name="async">非同期実行オブジェクト。</param>
+#endif
         public void EmulateSelect(int row, int col, int rowSel, int colSel, Async async)
         {
             AppVar.App[GetType(), "EmulateSelect", async](this, row, col, rowSel, colSel);
         }
+
 
         static void EmulateSelect(Control grid, int row, int col, int rowSel, int colSel)
         {
@@ -257,28 +352,80 @@ namespace Friendly.C1.Win
             Invoker.Call(grid, "Select", row, col, rowSel, colSel);
         }
 
-        public void EmulateAddRowSelect(int row)
+#if ENG
+        /// <summary>
+        /// Add selected row.
+        /// </summary>
+        /// <param name="row">Row.</param>
+#else
+        /// <summary>
+        /// 選択行を追加します。
+        /// </summary>
+        /// <param name="row">行。</param>
+#endif
+        public void EmulateAddSelectedRow(int row)
         {
-            AppVar.App[GetType(), "EmulateAddRowSelect"](this, row);
+            AppVar.App[GetType(), "EmulateAddSelectedRow"](this, row);
         }
 
-        public void EmulateAddRowSelect(int row, Async async)
+#if ENG
+        /// <summary>
+        /// Add selected row.
+        /// Executes asynchronously. 
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="async">Asynchronous execution.</param>
+#else
+        /// <summary>
+        /// 選択行を追加します。
+        /// 非同期で実行します。
+        /// </summary>
+        /// <param name="row">行。</param>
+        /// <param name="async">非同期実行オブジェクト。</param>
+#endif
+        public void EmulateAddSelectedRow(int row, Async async)
         {
-            AppVar.App[GetType(), "EmulateAddRowSelect", async](this, row);
+            AppVar.App[GetType(), "EmulateAddSelectedRow", async](this, row);
         }
 
-        static void EmulateAddRowSelect(Control grid, int row)
+        static void EmulateAddSelectedRow(Control grid, int row)
         {
             var items = Invoker.Call(grid, "get_Rows");
             var item = Invoker.Call(items, "get_Item", row);
             Invoker.Call(item, "set_Selected", true);
         }
 
+#if ENG
+        /// <summary>
+        /// Edit cell's text.
+        /// </summary>
+        /// <param name="text">Text.</param>
+#else
+        /// <summary>
+        /// セルのテキストを編集します。
+        /// </summary>
+        /// <param name="text">テキスト。</param>
+#endif
         public void EmulateEditText(string text)
         {
             AppVar.App[GetType(), "EmulateEditText"](this, text);
         }
 
+#if ENG
+        /// <summary>
+        /// Edit cell's text.
+        /// Executes asynchronously. 
+        /// </summary>
+        /// <param name="text">Text.</param>
+        /// <param name="async">Asynchronous execution.</param>
+#else
+        /// <summary>
+        /// セルのテキストを編集します。
+        /// 非同期で実行します。
+        /// </summary>
+        /// <param name="text">テキスト。</param>
+        /// <param name="async">非同期実行オブジェクト。</param>
+#endif
         public void EmulateEditText(string text, Async async)
         {
             AppVar.App[GetType(), "EmulateEditText", async](this, text);
@@ -294,11 +441,37 @@ namespace Friendly.C1.Win
             Invoker.Call(grid, "FinishEditing");
         }
 
+#if ENG
+        /// <summary>
+        /// Edit cell's check.
+        /// </summary>
+        /// <param name="check">Check.</param>
+#else
+        /// <summary>
+        /// セルのチェック状態を編集します。
+        /// </summary>
+        /// <param name="check">チェック状態。</param>
+#endif
         public void EmulateEditCheck(bool check)
         {
             AppVar.App[GetType(), "EmulateEditCheck"](this, Row, Col, check);
         }
 
+#if ENG
+        /// <summary>
+        /// Edit cell's check.
+        /// Executes asynchronously. 
+        /// </summary>
+        /// <param name="check">Check.</param>
+        /// <param name="async">Asynchronous execution.</param>
+#else
+        /// <summary>
+        /// セルのチェック状態を編集します。
+        /// 非同期で実行します。
+        /// </summary>
+        /// <param name="check">チェック状態。</param>
+        /// <param name="async">非同期実行オブジェクト。</param>
+#endif
         public void EmulateEditCheck(bool check, Async async)
         {
             AppVar.App[GetType(), "EmulateEditCheck", async](this, Row, Col, check);
@@ -319,11 +492,37 @@ namespace Friendly.C1.Win
             }
         }
 
+#if ENG
+        /// <summary>
+        /// Edit cell's combobox index.
+        /// </summary>
+        /// <param name="index">Index.</param>
+#else
+        /// <summary>
+        /// セルのコンボボックスの選択インデックスを編集します。
+        /// </summary>
+        /// <param name="index">選択インデックス。</param>
+#endif 
         public void EmulateEditCombo(int index)
         {
             AppVar.App[GetType(), "EmulateEditCombo"](this, index);
         }
 
+#if ENG
+        /// <summary>
+        /// Edit cell's combobox index.
+        /// Executes asynchronously. 
+        /// </summary>
+        /// <param name="index">Index.</param>
+        /// <param name="async">Asynchronous execution.</param>
+#else
+        /// <summary>
+        /// セルのコンボボックスの選択インデックスを編集します。
+        /// 非同期で実行します。
+        /// </summary>
+        /// <param name="index">選択インデックス。</param>
+        /// <param name="async">非同期実行オブジェクト。</param>
+#endif 
         public void EmulateEditCombo(int index, Async async)
         {
             AppVar.App[GetType(), "EmulateEditCombo", async](this, index);

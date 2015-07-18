@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="_grid.ColumnInfo" xml:space="preserve">
-    <value>5,1,0,0,0,90,Columns:2{Style:"DataType:System.Boolean;TextAlign:LeftCenter;ImageAlign:CenterCenter;";}	3{Style:"ComboList:""a|b|c"";";}	4{Style:"Format:""#,##0"";DataType:System.Int32;TextAlign:GeneralCenter;";}	</value>
+    <value>5,1,0,0,0,90,Columns:2{Style:"ComboList:""a|b|c"";TextAlign:GeneralCenter;ImageAlign:CenterCenter;";}	3{Style:"DataType:System.Boolean;TextAlign:LeftCenter;ImageAlign:CenterCenter;";}	4{Style:"Format:""#,##0"";DataType:System.Int32;TextAlign:GeneralCenter;";}	</value>
   </data>
 </root>

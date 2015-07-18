@@ -15,6 +15,26 @@ namespace TargetApp
         public FlexGridForm()
         {
             InitializeComponent();
+
+            //初期表示
+            _grid[0, 0] = "/";
+            _grid[0, 1] = "text";
+            _grid[0, 2] = "combo";
+            _grid[0, 3] = "check";
+            _grid[0, 4] = "format";
+
+            _grid[1, 0] = "1";
+            _grid[1, 1] = "text-1";
+            _grid[1, 2] = "a";
+            _grid[1, 3] = true;
+            _grid[1, 4] = 12345;
+
+            _grid[2, 0] = "2";
+            _grid[2, 1] = "text-2";
+            _grid[2, 2] = "b";
+            _grid[2, 3] = false;
+            _grid[2, 4] = 6789;
+
         }
     }
 }

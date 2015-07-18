@@ -38,7 +38,7 @@ namespace Test
         }
 
         [TestMethod]
-        public void TestSelect()
+        public void TestSelectCell()
         {
             _grid.EmulateSelect(1, 2);
             _grid.Row.Is(1);
@@ -46,36 +46,124 @@ namespace Test
             _grid.RowSel.Is(1);
             _grid.ColSel.Is(2);
         }
+        //@@@Async
+
+
+        [TestMethod]
+        public void TestSelectCells()
+        {
+            _grid.EmulateSelect(1, 2, 5, 3);
+            _grid.Row.Is(1);
+            _grid.Col.Is(2);
+            _grid.RowSel.Is(5);
+            _grid.ColSel.Is(3);
+        }
+        //@@@Async
+
+
+        [TestMethod]
+        public void TestAddRow()
+        {
+            _grid.Dynamic().SelectionMode = _app.Type().C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            _grid.EmulateAddSelectedRow(1);
+            _grid.EmulateAddSelectedRow(3);
+            _grid.EmulateAddSelectedRow(5);
+            var selectedRow = _grid.SelectedRows;
+            selectedRow.Length.Is(3);
+            selectedRow[0].Is(1);
+            selectedRow[1].Is(3);
+            selectedRow[2].Is(5);
+        }
+        //@@@Async
+
+
+        [TestMethod]
+        public void TestGetObjects()
+        {
+            var ret = _grid.GetCellObjects(0, 0, 2, 4);
+
+            ret.Length.Is(3);
+            ret[0].Length.Is(5);
+            ret[0][0].Is("/");
+            ret[0][1].Is("text");
+            ret[0][2].Is("combo");
+            ret[0][3].Is("check");
+            ret[0][4].Is("format");
+
+            ret[1][0].Is("1");
+            ret[1][1].Is("text-1");
+            ret[1][2].Is("a");
+            ret[1][3].Is(true);
+            ret[1][4].Is(12345);
+
+            ret[2][0].Is("2");
+            ret[2][1].Is("text-2");
+            ret[2][2].Is("b");
+            ret[2][3].Is(false);
+            ret[2][4].Is(6789);
+
+            _grid.GetCellObject(1, 2).Is("a");
+        }
 
         [TestMethod]
         public void TestGetTexts()
         {
-            _grid.EmulateSelect(1, 1);
-            _grid.EmulateEditText("1");
-            _grid.EmulateSelect(1, 2);
-            _grid.EmulateEditCheck(true);
-            _grid.EmulateEditCheck(false);
-            _grid.EmulateSelect(2, 2);
-            _grid.EmulateEditCheck(true);
-            var ret = _grid.GetCellTexts(1, 2, 1, 2);
-            ret.Length.Is(2);
-            ret[0].Length.Is(2);
-            ret[0][0].Is("1");
-            ret[0][1].Is(false.ToString());
-            ret[1][0].Is(string.Empty);
-            ret[1][1].Is(true.ToString());
+            var ret = _grid.GetCellTexts(0, 0, 2, 4);
 
-            _grid.EmulateSelect(1, 3);
-            _grid.EmulateEditCombo(2);
+            ret.Length.Is(3);
+            ret[0].Length.Is(5);
+            ret[0][0].Is("/");
+            ret[0][1].Is("text");
+            ret[0][2].Is("combo");
+            ret[0][3].Is("check");
+            ret[0][4].Is("format");
+
+            ret[1][0].Is("1");
+            ret[1][1].Is("text-1");
+            ret[1][2].Is("a");
+            ret[1][3].Is("True");
+            ret[1][4].Is("12,345");
+
+            ret[2][0].Is("2");
+            ret[2][1].Is("text-2");
+            ret[2][2].Is("b");
+            ret[2][3].Is("False");
+            ret[2][4].Is("6,789");
+
+            _grid.GetCellText(1, 2).Is("a");
         }
 
         [TestMethod]
-        public void XXX() 
+        public void TestEditText()
         {
-            _grid.Dynamic().SelectionMode = _app.Type().C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            _grid.EmulateAddRowSelect(1);
-            _grid.EmulateAddRowSelect(3);
-            _grid.EmulateAddRowSelect(5);
+            _grid.EmulateSelect(1, 1);
+            _grid.EmulateEditText("1-1");
+            _grid.GetCellText(1, 1).Is("1-1");
         }
+        //@@@async
+
+
+        [TestMethod]
+        public void TestEditCombo()
+        {
+            _grid.EmulateSelect(1, 2);
+            _grid.EmulateEditText("b");
+            _grid.GetCellText(1, 2).Is("b");
+
+            _grid.EmulateSelect(2, 2);
+            _grid.EmulateEditCombo(2);
+            _grid.GetCellText(2, 2).Is("c");
+        }
+        //@@@async
+
+
+        [TestMethod]
+        public void TestEditCheck()
+        {
+            _grid.EmulateSelect(1, 3);
+            _grid.EmulateEditCheck(true);
+            _grid.GetCellObject(1, 3).Is(true);
+        }
+        //@@@async
     }
 }
