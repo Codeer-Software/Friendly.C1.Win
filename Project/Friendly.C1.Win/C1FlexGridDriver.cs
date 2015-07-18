@@ -29,11 +29,60 @@ namespace Friendly.C1.Win
 #endif
         public AppVar AppVar { get; set; }
 
+
+#if ENG
+        /// <summary>
+        /// Row of cursor.
+        /// </summary>
+#else
+        /// <summary>
+        /// カーソルを含む行。
+        /// </summary>
+#endif
         public int Row { get { return (int)AppVar["Row"]().Core; } }
+
+#if ENG
+        /// <summary>
+        /// Col of cursor.
+        /// </summary>
+#else
+        /// <summary>
+        /// カーソルを含む列。
+        /// </summary>
+#endif        
         public int Col { get { return (int)AppVar["Col"]().Core; } }
+
+#if ENG
+        /// <summary>
+        /// Last row of selection.
+        /// </summary>
+#else
+        /// <summary>
+        /// 現在の選択範囲の最後の行。
+        /// </summary>
+#endif
         public int RowSel { get { return (int)AppVar["RowSel"]().Core; } }
+  
+#if ENG
+        /// <summary>
+        /// Last col of selection.
+        /// </summary>
+#else
+        /// <summary>
+        /// 現在の選択範囲の最後の列。
+        /// </summary>
+#endif      
         public int ColSel { get { return (int)AppVar["ColSel"]().Core; } }
 
+#if ENG
+        /// <summary>
+        /// Rows of selection.
+        /// </summary>
+#else
+        /// <summary>
+        /// 選択行。
+        /// </summary>
+#endif      
         public int[] SelectedRows { get { return (int[])AppVar.App[GetType(), "GetSelectedRows"](this).Core; } }
 
         static int[] GetSelectedRows(Control grid)
@@ -41,6 +90,15 @@ namespace Friendly.C1.Win
             return GetSelectedCllection(grid, "get_Rows");
         }
 
+#if ENG
+        /// <summary>
+        /// Cols of selection.
+        /// </summary>
+#else
+        /// <summary>
+        /// 選択列。
+        /// </summary>
+#endif    
         public int[] SelectedCols { get { return (int[])AppVar.App[GetType(), "GetSelectedCols"](this).Core; } }
 
         static int[] GetSelectedCols(Control grid)
@@ -81,6 +139,19 @@ namespace Friendly.C1.Win
             WindowsAppExpander.LoadAssembly((WindowsAppFriend)AppVar.App, typeof(C1FlexGridDriver).Assembly);
         }
 
+#if ENG
+        /// <summary>
+        /// Get cell's text.
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="col">Col.</param>
+#else
+        /// <summary>
+        /// セルのテキストを取得します。
+        /// </summary>
+        /// <param name="row">アプリケーション内変数。</param>
+        /// <param name="col">アプリケーション内変数。</param>
+#endif
         public string GetCellText(int row, int col)
         {
             var cell = AppVar["[,]"](row, col);
@@ -94,13 +165,40 @@ namespace Friendly.C1.Win
 
         static string[][] GetCellTexts(Control grid, int topRow, int bottomRow, int leftCol, int rightCol)
         {
+            var cols = Invoker.Call(grid, "get_Cols");
             var objs = GetCellObjects(grid, topRow, bottomRow, leftCol, rightCol);
             string[][] ret = new string[objs.Length][];
             for (int i = 0; i < objs.Length; i++) 
             {
                 ret[i] = new string[objs[i].Length];
-                for (int j = 0; j < objs[i].Length; j++) 
+                for (int j = 0, col = leftCol; col <= rightCol; j++, col++)
                 {
+                    var obj = objs[i][j];
+                    if (obj == null)
+                    {
+                        ret[i][j] = string.Empty;
+                    }
+                    else
+                    {
+                        var colsetting = Invoker.Call(cols, "get_Item", col);
+                        var format = (string)Invoker.Call(colsetting, "get_Format");
+                        if (string.IsNullOrEmpty(format))
+                        {
+                            ret[i][j] = obj.ToString();
+                        }
+                        else
+                        {
+                            var m = obj.GetType().GetMethod("ToString", new Type[] { typeof(string) });
+                            if (m != null)
+                            {
+                                ret[i][j] = (string)m.Invoke(obj, new object[] { format });
+                            }
+                            else 
+                            {
+                                ret[i][j] = obj.ToString();
+                            }
+                        }
+                    }
                     ret[i][j] = objs[i][j] == null ? string.Empty : objs[i][j].ToString();
                 }
             }

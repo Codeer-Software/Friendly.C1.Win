@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlexGridForm));
             this._grid = new C1.Win.C1FlexGrid.C1FlexGrid();
             ((System.ComponentModel.ISupportInitialize)(this._grid)).BeginInit();
             this.SuspendLayout();
             // 
             // _grid
             // 
-            this._grid.ColumnInfo = "4,1,0,0,0,90,Columns:2{Style:\"DataType:System.Boolean;TextAlign:LeftCenter;ImageA" +
-    "lign:CenterCenter;\";}\t3{Style:\"ComboList:\"\"a|b|c\"\";\";}\t";
+            this._grid.ColumnInfo = resources.GetString("_grid.ColumnInfo");
             this._grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this._grid.ExtendLastCol = true;
             this._grid.Location = new System.Drawing.Point(0, 0);
