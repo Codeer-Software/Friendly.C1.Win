@@ -36,5 +36,20 @@ namespace TargetApp
             _grid[2, 4] = 6789;
 
         }
+
+        void ConnectRowColChange()
+        {
+            _grid.RowColChange += delegate { MessageBox.Show(""); };
+        }
+
+        void ConnectSelChange()
+        {
+            _grid.SelChange += delegate { MessageBox.Show(""); };
+        }
+
+        void ConnectAfterEdit()
+        {
+            _grid.AfterEdit += delegate { MessageBox.Show(""); };
+        }
     }
 }

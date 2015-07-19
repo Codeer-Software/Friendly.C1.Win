@@ -46,8 +46,18 @@ namespace Test
             _grid.RowSel.Is(1);
             _grid.ColSel.Is(2);
         }
-        //@@@Async
 
+        [TestMethod]
+        public void TestSelectCellAsync()
+        {
+            _dlg.Dynamic().ConnectRowColChange();
+            _grid.EmulateSelect(1, 2, new Async());
+            new NativeMessageBox(_dlg.WaitForNextModal()).EmulateButtonClick("OK");
+            _grid.Row.Is(1);
+            _grid.Col.Is(2);
+            _grid.RowSel.Is(1);
+            _grid.ColSel.Is(2);
+        }
 
         [TestMethod]
         public void TestSelectCells()
@@ -58,8 +68,18 @@ namespace Test
             _grid.RowSel.Is(5);
             _grid.ColSel.Is(3);
         }
-        //@@@Async
 
+        [TestMethod]
+        public void TestSelectCellsAsync()
+        {
+            _dlg.Dynamic().ConnectRowColChange();
+            _grid.EmulateSelect(1, 2, 5, 3, new Async());
+            new NativeMessageBox(_dlg.WaitForNextModal()).EmulateButtonClick("OK");
+            _grid.Row.Is(1);
+            _grid.Col.Is(2);
+            _grid.RowSel.Is(5);
+            _grid.ColSel.Is(3);
+        }
 
         [TestMethod]
         public void TestAddRow()
@@ -74,8 +94,19 @@ namespace Test
             selectedRow[1].Is(3);
             selectedRow[2].Is(5);
         }
-        //@@@Async
 
+        [TestMethod]
+        public void TestAddRowAsync()
+        {
+            _grid.Dynamic().SelectionMode = _app.Type().C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            _dlg.Dynamic().ConnectSelChange();
+            _grid.EmulateAddSelectedRow(2, new Async());
+            new NativeMessageBox(_dlg.WaitForNextModal()).EmulateButtonClick("OK");
+            var selectedRow = _grid.SelectedRows;
+            selectedRow.Length.Is(2);
+            selectedRow[0].Is(1);
+            selectedRow[1].Is(2);
+        }
 
         [TestMethod]
         public void TestGetObjects()
@@ -140,8 +171,16 @@ namespace Test
             _grid.EmulateEditText("1-1");
             _grid.GetCellText(1, 1).Is("1-1");
         }
-        //@@@async
 
+        [TestMethod]
+        public void TestEditTextAsync()
+        {
+            _dlg.Dynamic().ConnectAfterEdit();
+            _grid.EmulateSelect(1, 1);
+            _grid.EmulateEditText("1-1", new Async());
+            new NativeMessageBox(_dlg.WaitForNextModal()).EmulateButtonClick("OK");
+            _grid.GetCellText(1, 1).Is("1-1");
+        }
 
         [TestMethod]
         public void TestEditCombo()
@@ -154,16 +193,33 @@ namespace Test
             _grid.EmulateEditCombo(2);
             _grid.GetCellText(2, 2).Is("c");
         }
-        //@@@async
 
+        [TestMethod]
+        public void TestEditComboAsync()
+        {
+            _dlg.Dynamic().ConnectAfterEdit();
+            _grid.EmulateSelect(2, 2);
+            _grid.EmulateEditCombo(2, new Async());
+            new NativeMessageBox(_dlg.WaitForNextModal()).EmulateButtonClick("OK");
+            _grid.GetCellText(2, 2).Is("c");
+        }
 
         [TestMethod]
         public void TestEditCheck()
         {
             _grid.EmulateSelect(1, 3);
-            _grid.EmulateEditCheck(true);
-            _grid.GetCellObject(1, 3).Is(true);
+            _grid.EmulateEditCheck(false);
+            _grid.GetCellObject(1, 3).Is(false);
         }
-        //@@@async
+
+        [TestMethod]
+        public void TestEditCheckAsync()
+        {
+            _dlg.Dynamic().ConnectAfterEdit();
+            _grid.EmulateSelect(1, 3);
+            _grid.EmulateEditCheck(false, new Async());
+            new NativeMessageBox(_dlg.WaitForNextModal()).EmulateButtonClick("OK");
+            _grid.GetCellObject(1, 3).Is(false);
+        }
     }
 }
