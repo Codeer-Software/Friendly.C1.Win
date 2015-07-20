@@ -9,7 +9,7 @@ http://www.english.codeer.co.jp/test-automation/friendly-fundamental
 
 ============================
 Friendly.C1.Win defines the following classes.   
-They can operate WPF control easily from a separate process.  
+They can operate the control easily from a separate process.  
 
 * C1FlexGridDriver
 
