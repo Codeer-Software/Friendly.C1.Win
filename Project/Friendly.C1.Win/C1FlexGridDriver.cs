@@ -4,6 +4,7 @@ using Codeer.Friendly;
 using Codeer.Friendly.Windows;
 using Friendly.C1.Win.Inside;
 using System.Collections.Generic;
+using Codeer.Friendly.Windows.Grasp;
 
 namespace Friendly.C1.Win
 {
@@ -16,20 +17,8 @@ namespace Friendly.C1.Win
     /// TypeがC1.Win.C1FlexGrid.C1FlexGridに対応した操作を提供します。
     /// </summary>
 #endif
-    public class C1FlexGridDriver : IAppVarOwner
+    public class C1FlexGridDriver : WindowControl
     {
-#if ENG
-        /// <summary>
-        /// Returns an AppVar for a .NET object for the corresponding window.
-        /// </summary>
-#else
-        /// <summary>
-        /// 対応するウィンドウの.Netのオブジェクトが格納されたAppVarを取得します。
-        /// </summary>
-#endif
-        public AppVar AppVar { get; set; }
-
-
 #if ENG
         /// <summary>
         /// Row of cursor.
@@ -113,9 +102,8 @@ namespace Friendly.C1.Win
         /// </summary>
         /// <param name="appVar">アプリケーション内変数。</param>
 #endif
-        public C1FlexGridDriver(AppVar appVar)
+        public C1FlexGridDriver(AppVar appVar) : base(appVar)
         {
-            AppVar = appVar;
             WindowsAppExpander.LoadAssembly((WindowsAppFriend)AppVar.App, typeof(C1FlexGridDriver).Assembly);
         }
 
