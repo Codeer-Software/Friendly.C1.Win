@@ -5,15 +5,21 @@ This library is a layer on top of
 Friendly, so you must learn that first.
 But it is very easy to learn.
 
-http://www.english.codeer.co.jp/test-automation/friendly-fundamental  
+https://github.com/Codeer-Software/Friendly.Windows 
 
-============================
+## Getting Started
+Install Friendly.C1.Win from NuGet
+
+    Install-Package Friendly.C1.Win
+https://www.nuget.org/packages/Friendly.C1.Win/
+
+***
 Friendly.C1.Win defines the following classes.   
 They can operate the control easily from a separate process.  
 
 * C1FlexGridDriver
 
-============================
+***
 ```cs  
 //sample  
 var process = Process.GetProcessesByName("Target")[0];  
@@ -54,12 +60,10 @@ using (var app = new WindowsAppFriend(process))
     grid.EmulateEditCheck(false);
 }  
 ```
+### More samples.
+https://github.com/Codeer-Software/Friendly.C1.Win/tree/master/Project/Test
 
-============================
-Download from NuGet.  
-https://www.nuget.org/packages/Friendly.C1.Win/
-
-============================
+***
 For other GUI types, use the following libraries:
 
 * For Win32.  
@@ -79,7 +83,7 @@ https://www.nuget.org/packages/Friendly.XamControls/
 https://www.nuget.org/packages/Friendly.C1.Win/  
 https://www.nuget.org/packages/Friendly.FarPoint/  
 
-============================
+***
 If you use PinInterface, you map control simple.  
 https://www.nuget.org/packages/VSHTC.Friendly.PinInterface/
 
