@@ -38,6 +38,15 @@ namespace Test
         }
 
         [TestMethod]
+        public void TestCount()
+        {
+            _grid.RowCount.Is(50);
+            _grid.ColCount.Is(5);
+            _grid.FixedRowCount.Is(1);
+            _grid.FixedColCount.Is(1);
+        }
+
+        [TestMethod]
         public void TestSelectCell()
         {
             _grid.EmulateSelect(1, 2);

@@ -45,6 +45,49 @@ namespace Friendly.C1.Win
 
 #if ENG
         /// <summary>
+        /// Row count.
+        /// </summary>
+#else
+        /// <summary>
+        /// 行数
+        /// </summary>
+#endif
+        public int RowCount { get { return (int)AppVar["Rows"]()["Count"]().Core; } }
+
+#if ENG
+        /// <summary>
+        /// Col count.
+        /// </summary>
+#else
+        /// <summary>
+        /// 列数
+        /// </summary>
+#endif
+        public int ColCount { get { return (int)AppVar["Cols"]()["Count"]().Core; } }
+
+#if ENG
+        /// <summary>
+        /// Fixed row count.
+        /// </summary>
+#else
+        /// <summary>
+        /// 固定行数
+        /// </summary>
+#endif
+        public int FixedRowCount { get { return (int)AppVar["Rows"]()["Fixed"]().Core; } }
+
+#if ENG
+        /// <summary>
+        /// Fixed col count.
+        /// </summary>
+#else
+        /// <summary>
+        /// 固定列数
+        /// </summary>
+#endif
+        public int FixedColCount { get { return (int)AppVar["Cols"]()["Fixed"]().Core; } }
+#if ENG
+        /// <summary>
         /// Last row of selection.
         /// </summary>
 #else

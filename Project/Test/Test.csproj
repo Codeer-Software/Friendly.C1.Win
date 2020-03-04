@@ -96,7 +96,6 @@
     <Compile Include="Target.cs" />
     <Compile Include="FlexGridTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Test\FlexGridForm_Driver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Friendly.C1.Win.Generator\Friendly.C1.Win.Generator.csproj">
