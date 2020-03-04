@@ -5,6 +5,7 @@ using Codeer.Friendly.Windows;
 using Friendly.C1.Win.Inside;
 using System.Collections.Generic;
 using Codeer.Friendly.Windows.Grasp;
+using Codeer.TestAssistant.GeneratorToolKit;
 
 namespace Friendly.C1.Win
 {
@@ -17,6 +18,7 @@ namespace Friendly.C1.Win
     /// TypeがC1.Win.C1FlexGrid.C1FlexGridに対応した操作を提供します。
     /// </summary>
 #endif
+    [ControlDriver(TypeFullName = "C1.Win.C1FlexGrid.C1FlexGrid")]
     public class C1FlexGridDriver : WindowControl
     {
 #if ENG

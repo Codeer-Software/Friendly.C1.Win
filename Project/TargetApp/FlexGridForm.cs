@@ -34,6 +34,32 @@ namespace TargetApp
             _grid[2, 2] = "b";
             _grid[2, 3] = false;
             _grid[2, 4] = 6789;
+            _grid.AfterEdit += _grid_AfterEdit;
+            _grid.BeforeEdit += _grid_BeforeEdit;
+            _grid.ValidateEdit += _grid_ValidateEdit;
+
+
+        }
+
+
+        private void _grid_ValidateEdit(object sender, ValidateEditEventArgs e)
+        {
+        }
+
+        private void _grid_BeforeEdit(object sender, RowColEventArgs e)
+        {
+        }
+
+        private void _grid_Validating(object sender, CancelEventArgs e)
+        {
+            
+        }
+
+        private void _grid_AfterEdit(object sender, RowColEventArgs e)
+        {
+            var x1 = _grid.Cols[0].DataType;
+            var x2 = _grid.Cols[1].DataType;
+            var x3 = _grid.Cols[2].DataType;
 
         }
 
@@ -44,6 +70,7 @@ namespace TargetApp
 
         void ConnectSelChange()
         {
+
             _grid.SelChange += delegate { MessageBox.Show(""); };
         }
 
