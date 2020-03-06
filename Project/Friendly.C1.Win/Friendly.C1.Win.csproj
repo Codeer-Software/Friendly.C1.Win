@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="C1FlexGridDriver.cs" />
+    <Compile Include="CellDriver.cs" />
     <Compile Include="Inside\Invoker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

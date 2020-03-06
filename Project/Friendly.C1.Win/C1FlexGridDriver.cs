@@ -6,6 +6,7 @@ using Friendly.C1.Win.Inside;
 using System.Collections.Generic;
 using Codeer.Friendly.Windows.Grasp;
 using Codeer.TestAssistant.GeneratorToolKit;
+using System.Drawing;
 
 namespace Friendly.C1.Win
 {
@@ -110,13 +111,48 @@ namespace Friendly.C1.Win
 
 #if ENG
         /// <summary>
+        /// Get cell rectangle
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="col">Col</param>
+        /// <returns>Cell rectangle</returns>
+#else
+        /// <summary>
+        /// セル矩形取得
+        /// </summary>
+        /// <param name="row">行</param>
+        /// <param name="col">列</param>
+        /// <returns>セル矩形</returns>
+#endif
+        public Rectangle GetCellRect(int row, int col)
+            => (Rectangle)AppVar["GetCellRect"](row, col).Core;
+
+#if ENG
+        /// <summary>
+        /// Get cell
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="col">Col</param>
+        /// <returns>Cell</returns>
+#else
+        /// <summary>
+        /// セル取得
+        /// </summary>
+        /// <param name="row">行</param>
+        /// <param name="col">列</param>
+        /// <returns>セル</returns>
+#endif
+        public CellDriver GetCell(int row, int col) => new CellDriver(this, row, col);
+
+#if ENG
+        /// <summary>
         /// Rows of selection.
         /// </summary>
 #else
         /// <summary>
         /// 選択行。
         /// </summary>
-#endif      
+#endif
         public int[] SelectedRows { get { return (int[])AppVar.App[GetType(), "GetSelectedRows"](this).Core; } }
 
         static int[] GetSelectedRows(Control grid)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Codeer.TestAssistant.GeneratorToolKit;
 
@@ -76,6 +77,20 @@ namespace Friendly.C1.Win.Generator
         public override void Optimize(List<Sentence> code)
         {
             GenerateUtility.RemoveDuplicationFunction(this, code, "EmulateSelect");
+        }
+
+        public override bool ConvertChildClientPoint(ref Point clientPoint, out string childUIObject)
+        {
+            childUIObject = string.Empty;
+            var info = _grid.HitTest(clientPoint);
+            if (info.Row < 0 || _grid.Rows.Count <= info.Row) return false;
+            if (info.Column < 0 || _grid.Cols.Count <= info.Column) return false;
+
+            childUIObject = $".GetCell({info.Row}, {info.Column})";
+
+            var rc = _grid.GetCellRect(info.Row, info.Column);
+            clientPoint = new Point(clientPoint.X - rc.X, clientPoint.Y - rc.Y);
+            return true;
         }
     }
 }

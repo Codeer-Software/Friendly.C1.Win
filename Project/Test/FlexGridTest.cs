@@ -9,6 +9,7 @@ using Codeer.Friendly.Windows.Grasp;
 using Friendly.C1.Win;
 using Codeer.Friendly.Windows.NativeStandardControls;
 using Ong.Friendly.FormsStandardControls;
+using Codeer.Friendly.Windows.KeyMouse;
 
 namespace Test
 {
