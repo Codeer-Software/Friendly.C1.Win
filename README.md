@@ -50,7 +50,7 @@ using (var app = new WindowsAppFriend(process))
     grid.GetCellTexts(0, 0, 2, 4);
     
     //get cell object.
-    //it can use for serializasble objects.
+    //it can use for serializable objects.
     grid.GetCellObjects(0, 0, 2, 4);
     grid.GetCellObject(1, 2);
     
@@ -86,4 +86,5 @@ https://www.nuget.org/packages/Friendly.FarPoint/
 ***
 If you use PinInterface, you map control simple.  
 https://www.nuget.org/packages/VSHTC.Friendly.PinInterface/
+
 
